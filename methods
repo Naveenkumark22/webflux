@@ -1,0 +1,247 @@
+flatMap()
+Transforms each item into a Publisher and merges the results.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").flatMap(letter -> Flux.just(letter + "1", letter + "2")); 
+flux.subscribe(System.out::println);
+filter()
+Filters items based on a condition.
+
+java
+Copy code
+Flux<Integer> flux = Flux.range(1, 10).filter(number -> number % 2 == 0); 
+flux.subscribe(System.out::println);
+map()
+Transforms each item by applying a function.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").map(String::toLowerCase); 
+flux.subscribe(System.out::println);
+zip()
+Combines items from multiple publishers into tuples.
+
+java
+Copy code
+Flux<String> flux1 = Flux.just("A", "B"); 
+Flux<Integer> flux2 = Flux.just(1, 2); 
+Flux<Tuple2<String, Integer>> zipped = Flux.zip(flux1, flux2); 
+zipped.subscribe(tuple -> System.out.println(tuple.getT1() + " - " + tuple.getT2()));
+combineLatest()
+Combines the latest items from multiple publishers.
+
+java
+Copy code
+Flux<String> flux1 = Flux.just("A", "B"); 
+Flux<Integer> flux2 = Flux.just(1, 2, 3); 
+Flux<String> combined = Flux.combineLatest(flux1, flux2, (s, i) -> s + i); 
+combined.subscribe(System.out::println);
+distinct()
+Removes duplicate items.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "A", "B", "B").distinct(); 
+flux.subscribe(System.out::println);
+distinctUntilChanged()
+Removes consecutive duplicate items.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "A", "B", "B", "A").distinctUntilChanged(); 
+flux.subscribe(System.out::println);
+collectList()
+Collects emitted items into a list.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B", "C"); 
+flux.collectList().subscribe(System.out::println);
+collectMap()
+Collects items into a map.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B", "C"); 
+flux.collectMap(String::toUpperCase, String::length).subscribe(System.out::println);
+reduce()
+Aggregates items into a single value.
+
+java
+Copy code
+Flux<Integer> flux = Flux.range(1, 5); 
+flux.reduce(0, Integer::sum).subscribe(System.out::println);
+retry()
+Retries the operation on error.
+
+java
+Copy code
+Mono<String> mono = Mono.fromCallable(() -> { throw new RuntimeException("Error"); }).retry(3); 
+mono.subscribe(System.out::println, error -> System.out.println("Failed: " + error.getMessage()));
+doOnError()
+Performs an action when an error occurs.
+
+java
+Copy code
+Mono<String> mono = Mono.fromCallable(() -> { throw new RuntimeException("Error"); }).doOnError(error -> System.out.println("Error occurred: " + error.getMessage())); 
+mono.subscribe();
+switchIfEmpty()
+Provides an alternative if the source is empty.
+
+java
+Copy code
+Mono<String> mono = Mono.empty().switchIfEmpty(Mono.just("Default Value")); 
+mono.subscribe(System.out::println);
+timeout()
+Sets a timeout period for the publisher.
+
+java
+Copy code
+Flux<Integer> flux = Flux.range(1, 10).delayElements(Duration.ofSeconds(1)).timeout(Duration.ofMillis(500)); 
+flux.subscribe(System.out::println, error -> System.out.println("Timeout: " + error.getMessage()));
+window()
+Splits the sequence into smaller windows of specified size.
+
+java
+Copy code
+Flux.range(1, 10).window(3).flatMap(window -> window.collectList()).subscribe(System.out::println);
+delaySubscription()
+Delays the subscription to the publisher.
+
+java
+Copy code
+Flux<Integer> flux = Flux.range(1, 5).delaySubscription(Duration.ofSeconds(2)); 
+flux.subscribe(System.out::println);
+expand()
+Recursively expands the stream based on a function applied to each item.
+
+java
+Copy code
+Flux<Integer> flux = Flux.just(1).expand(i -> Flux.just(i + 1).take(2)); 
+flux.subscribe(System.out::println);
+materialize()
+Converts items into signals containing item, error, or completion.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B", "C").materialize(); 
+flux.subscribe(signal -> System.out.println(signal.getType() + ": " + signal.get()));
+onErrorResume()
+Provides an alternative Mono or Flux in case of an error.
+
+java
+Copy code
+Mono<String> mono = Mono.error(new RuntimeException("Error")).onErrorResume(e -> Mono.just("Fallback Value")); 
+mono.subscribe(System.out::println);
+onErrorReturn()
+Provides a default value in case of an error.
+
+java
+Copy code
+Mono<String> mono = Mono.error(new RuntimeException("Error")).onErrorReturn("Default Value"); 
+mono.subscribe(System.out::println);
+doOnSubscribe()
+Performs an action when a subscription is made.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").doOnSubscribe(subscription -> System.out.println("Subscribed")); 
+flux.subscribe(System.out::println);
+doOnNext()
+Performs an action for each item emitted.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").doOnNext(item -> System.out.println("Item: " + item)); 
+flux.subscribe();
+doOnComplete()
+Performs an action when the sequence completes.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").doOnComplete(() -> System.out.println("Completed")); 
+flux.subscribe();
+doOnCancel()
+Performs an action when the subscription is canceled.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").doOnCancel(() -> System.out.println("Canceled")); 
+flux.subscribe();
+then()
+Concatenates the current Mono or Flux with another Mono or Flux and ignores the result of the current one.
+
+java
+Copy code
+Mono<Void> mono1 = Mono.just("Hello").then(Mono.just("World")); 
+mono1.subscribe(System.out::println);
+concatWith()
+Concatenates the current Flux with another Flux.
+
+java
+Copy code
+Flux<String> flux1 = Flux.just("A", "B"); 
+Flux<String> flux2 = Flux.just("C", "D"); 
+Flux<String> concatenated = flux1.concatWith(flux2); 
+concatenated.subscribe(System.out::println);
+mergeWith()
+Merges the current Flux with another Flux, interleaving their items.
+
+java
+Copy code
+Flux<String> flux1 = Flux.just("A", "B"); 
+Flux<String> flux2 = Flux.just("C", "D"); 
+Flux<String> merged = flux1.mergeWith(flux2); 
+merged.subscribe(System.out::println);
+switchOnFirst()
+Switches to another Flux based on the first item emitted.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").switchOnFirst((signal, first) -> first); 
+flux.subscribe(System.out::println);
+flatMapSequential()
+Similar to flatMap(), but preserves order of items.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A", "B").flatMapSequential(letter -> Flux.just(letter + "1", letter + "2")); 
+flux.subscribe(System.out::println);
+scan()
+Accumulates items into a running total or state.
+
+java
+Copy code
+Flux<Integer> flux = Flux.range(1, 5).scan(0, Integer::sum); 
+flux.subscribe(System.out::println);
+using()
+Creates a new resource, uses it, and ensures it's disposed of properly.
+
+java
+Copy code
+Mono<String> mono = Mono.using(() -> "Resource", resource -> Mono.just(resource), resource -> System.out.println("Disposed")); 
+mono.subscribe(System.out::println);
+defer()
+Defers the creation of the Mono or Flux until subscription time.
+
+java
+Copy code
+Mono<String> mono = Mono.defer(() -> Mono.just("Deferred")); 
+mono.subscribe(System.out::println);
+repeat()
+Repeats the sequence a specified number of times or indefinitely.
+
+java
+Copy code
+Flux<String> flux = Flux.just("A").repeat(2); 
+flux.subscribe(System.out::println);
+retryWhen()
+Retries the sequence based on a strategy provided in a function.
+
+java
+Copy code
+Mono<String> mono = Mono.error(new RuntimeException("Error")).retryWhen(errors -> errors.delayElements(Duration.ofSeconds(1)).take(3)); 
+mono.subscribe(System.out::println, error -> System.out.println("Failed: " + error.getMessage()));
+onErrorMap()
+Transforms the error
