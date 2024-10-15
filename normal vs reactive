@@ -1,0 +1,46 @@
+Blocking :
+
+Time (ms) | Action
+-----------|-------------------------------------------------------
+0          | Request 1 starts (Thread 1)
+0          | Request 2 starts (Thread 2)
+0          | Request 3 starts (Thread 3)
+0          | Request 4 starts (Thread 4)
+0          | Request 5 starts (Thread 5)
+200        | Request 1 completes (Thread 1 freed)
+200        | Request 6 starts (Thread 1)
+400        | Request 2 completes (Thread 2 freed)
+400        | Request 7 starts (Thread 2)
+600        | Request 3 completes (Thread 3 freed)
+600        | Request 8 starts (Thread 3)
+800        | Request 4 completes (Thread 4 freed)
+800        | Request 9 starts (Thread 4)
+1000       | Request 5 completes (Thread 5 freed)
+1000       | Request 10 starts (Thread 5)
+1200       | All requests complete.
+
+
+
+
+-----------------------------------------------
+
+Reactive:
+
+Time (ms) | Action
+-----------|-------------------------------------------------------
+0          | Request 1 starts (Thread 1) (Database operation begins)
+0          | Request 2 starts (Thread 2) (Database operation begins)
+0          | Request 3 starts (Thread 3) (Database operation begins)
+0          | Request 4 starts (Thread 4) (Database operation begins)
+0          | Request 5 starts (Thread 5) (Database operation begins)
+0          | Request 6 starts (Thread 1) (Database operation begins)
+0          | Request 7 starts (Thread 2) (Database operation begins)
+0          | Request 8 starts (Thread 3) (Database operation begins)
+0          | Request 9 starts (Thread 4) (Database operation begins)
+0          | Request 10 starts (Thread 5) (Database operation begins)
+200        | All requests complete simultaneously.
+
+
+
+--------------------------------------------------------------
+
