@@ -1,0 +1,54 @@
+Insert
+
+insert(Object objectToSave)
+insert(Object objectToSave, String collectionName)
+insertAll(Collection<? extends Object> batchToSave)
+
+-----------------------------------
+
+Find
+
+find(Query query, Class<T> entityClass)
+findOne(Query query, Class<T> entityClass)
+findById(Object id, Class<T> entityClass)
+findAll(Class<T> entityClass)
+---------------------------------------
+
+Update
+
+updateFirst(Query query, Update update, Class<T> entityClass)
+updateMulti(Query query, Update update, Class<T> entityClass)
+findAndModify(Query query, Update update, Class<T> entityClass)
+upsert(Query query, Update update, Class<T> entityClass)
+
+------------------------
+Delete
+-
+remove(Object object)
+remove(Query query, Class<T> entityClass)
+
+---------------------
+Aggregation
+
+aggregate(Aggregation aggregation, String collectionName, Class<T> outputType)
+----------------
+Count & Existence Check
+
+count(Query query, Class<T> entityClass)
+exists(Query query, Class<T> entityClass)
+
+---------------------------
+Distinct
+
+getCollection(collectionName).distinct(field, Class<T>)
+
+------------------------
+Bulk Operations
+
+bulkOps(BulkMode mode, Class<?> entityClass)
+-----------------------
+Index Operations
+
+
+indexOps(Class<T> entityClass).ensureIndex(Index index)
+indexOps(Class<T> entityClass).dropAllIndexes()
