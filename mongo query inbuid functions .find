@@ -1,0 +1,100 @@
+MongoDB Query Operators
+
+ 
+
+$eq
+Matches documents where the value of a field equals the specified value.
+Example: db.collection.find({ "status": { $eq: "A" } })
+ 
+
+$ne
+Matches documents where the value of a field is not equal to the specified value.
+Example: db.collection.find({ "status": { $ne: "A" } })
+ 
+
+$gt, $gte, $lt, $lte
+Comparison operators:
+$gt: Greater than.
+$gte: Greater than or equal to.
+$lt: Less than.
+$lte: Less than or equal to.
+Examples:
+db.collection.find({ "age": { $gt: 25 } })
+db.collection.find({ "price": { $lte: 100 } })
+ 
+
+$in, $nin
+Matches any of (or none of) the values in an array.
+Examples:
+db.collection.find({ "status": { $in: ["A", "B", "C"] } })
+db.collection.find({ "status": { $nin: ["A", "B"] } })
+ 
+
+$and, $or, $nor, $not
+Logical operators:
+$and: All conditions must match.
+$or: At least one condition must match.
+$nor: None of the conditions should match.
+$not: Inverts the effect of a query expression.
+Example: db.collection.find({ $and: [{ "status": "A" }, { "age": { $gt: 25 } }] })
+ 
+
+$exists, $type
+Element operators:
+$exists: Checks if a field exists.
+$type: Checks the BSON type of the field.
+Example: db.collection.find({ "score": { $exists: true } })
+ 
+
+$regex
+Matches documents that satisfy a regular expression.
+Example: db.collection.find({ "name": { $regex: /^A/i } })
+
+
+$size, $all, $elemMatch
+Array operators:
+$size: Matches arrays with a specified number of elements.
+$all: Matches arrays containing all specified elements.
+$elemMatch: Matches arrays with at least one element that satisfies specified criteria.
+Examples:
+db.collection.find({ "tags": { $size: 3 } })
+db.collection.find({ "results": { $elemMatch: { "score": { $gt: 80 } } } })
+MongoDB Projection Operators
+
+ 
+
+$
+Positional operator that returns the first matching element in an array.
+Example: db.collection.find({ "results.score": { $gt: 80 } }, { "results.$": 1 })
+ 
+
+$slice
+Limits the number of array elements to return.
+Example: db.collection.find({}, { "results": { $slice: 2 } })
+ 
+
+$elemMatch
+Projects only the first matching element in an array based on criteria.
+Example: db.collection.find({}, { "results": { $elemMatch: { "score": { $gt: 80 } } } })
+ 
+
+Field Inclusion and Exclusion
+Specify fields to include or exclude in the output.
+Examples:
+db.collection.find({}, { "name": 1, "age": 1 })
+db.collection.find({}, { "password": 0 })
+Combined Example
+
+javascript
+Copy code
+db.collection.find(
+   { "status": "A", "age": { $gte: 21 } }, 
+   { "name": 1, "age": 1 }
+)
+This example finds documents where status is "A" and age is 21 or older, returning only name and age fields.
+
+
+
+
+
+
